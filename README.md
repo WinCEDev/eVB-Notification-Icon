@@ -3,7 +3,7 @@ This module enables your eVB application to add an icon to the taskbar status ar
 
 While eVB does not have the ability to subclass forms and inspect or modify window messages, the way this works is by (ab)using the `MouseDown` event of the form. The [Shell_NotifyIcon](https://learn.microsoft.com/en-us/previous-versions/ms942613(v=msdn.10)) API function lets you specify which window message to send when the user interacts with your icon. eVB is already handling the mouse related event messages so this message will appear as a regular `MouseDown` message to your form. The example project includes code to differentiate between regular `MouseDown` messages and ones triggered from the notify icon, so you'll be able to handle both appropriately.
 
-This method is similar to the approach Microsoft used in [Q176085](https://jeffpar.github.io/kbarchive/kb/176/Q176085/), which I used as a reference for this module. However, unlike the article, I had to use the `MouseDown` event instead of `MouseMove`, because Windows CE seems to handle these messages differently and sending `WM_MOUSEMOVE` does not trigger the corrosponding event in eVB.
+This method is similar to the approach Microsoft used in [Q176085](https://jeffpar.github.io/kbarchive/kb/176/Q176085/), which I used as a reference for this module. However, unlike the article, I had to use the `MouseDown` event instead of `MouseMove`, because Windows CE seems to handle these messages differently and sending `WM_MOUSEMOVE` does not trigger the corresponding event in eVB.
 
 _An interesting side note is that the Microsoft article claims that this functionality is possible due to the new abilities of VB5/VB6 (most notably the AddressOf operator). However, the given example does not make use of these functionalities at all, and in theory would work just as well in VB4 (or indeed, eVB)._
 
@@ -61,3 +61,13 @@ Private Sub Form_Unload(Cancel As Integer)
     Cancel = 1
 End Sub
 ```
+
+## Screenshots
+
+![Screenshot showing the example application, the notification area icon is currently not visible.](https://github.com/WinCEDev/eVB-Notification-Icon/blob/main/Screenshots/CAPT0000.png?raw=1)
+
+![Screenshot showing the example application, the notification area icon is currently visible.](https://github.com/WinCEDev/eVB-Notification-Icon/blob/main/Screenshots/CAPT0001.png?raw=1)
+
+## Links
+
+- [HPC:Factor Forum Thread](https://www.hpcfactor.com/forums/forums/thread-view.asp?tid=20861&posts=1)
