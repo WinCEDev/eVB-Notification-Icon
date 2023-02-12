@@ -77,7 +77,7 @@ Public Function NotifyIcon_Add(ByVal FormHandle As Long, _
                                ByVal Index As Long) As Long
                                
     If CallbackFormHandle <> 0 Then 'An icon is already present.
-        NotifyIcon_Remove CallbackFormHandle 'First remove the old icon.
+        NotifyIcon_Remove 'First remove the old icon.
     End If
 
     CallbackFormHandle = FormHandle
