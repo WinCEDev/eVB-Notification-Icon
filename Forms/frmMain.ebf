@@ -1,0 +1,229 @@
+VERSION 5.00
+Object = "{E491F001-98EC-11D1-9B3D-00C04FAD5AEC}#1.0#0"; "msceimagelist.dll"
+Begin VB.Form frmMain 
+   BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "Notification Icon Example"
+   ClientHeight    =   2535
+   ClientLeft      =   -15
+   ClientTop       =   270
+   ClientWidth     =   3135
+   ScaleHeight     =   2535
+   ScaleWidth      =   3135
+   ShowInTaskbar   =   0   'False
+   Begin CEImageListCtl.ImageList ImageList 
+      Left            =   0
+      Top             =   0
+      _cx             =   990
+      _cy             =   990
+      ImageWidth      =   0
+      ImageHeight     =   0
+   End
+   Begin VBCE.Timer tmrWait 
+      Left            =   600
+      Top             =   0
+      _cx             =   847
+      _cy             =   847
+      Enabled         =   0   'False
+      Interval        =   1000
+   End
+   Begin VBCE.CommandButton cmdWait 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   3
+      Top             =   1560
+      Width           =   2895
+      _cx             =   5106
+      _cy             =   661
+      Appearance      =   1
+      BackColor       =   -2147483633
+      Caption         =   "&Wait"
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Style           =   0
+   End
+   Begin VBCE.CommandButton cmdQuit 
+      Height          =   375
+      Left            =   120
+      TabIndex        =   2
+      Top             =   2040
+      Width           =   2895
+      _cx             =   5106
+      _cy             =   661
+      Appearance      =   1
+      BackColor       =   -2147483633
+      Caption         =   "&Quit"
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Style           =   0
+   End
+   Begin VBCE.ListBox lstMessages 
+      Height          =   1035
+      Left            =   120
+      TabIndex        =   1
+      Top             =   480
+      Width           =   2895
+      List            =   "frmMain.frx":0000
+      ItemData        =   "frmMain.frx":0028
+      _cx             =   5106
+      _cy             =   1826
+      Appearance      =   1
+      BackColor       =   -2147483643
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Columns         =   0
+      IntegralHeight  =   -1  'True
+      MultiSelect     =   0
+      Sorted          =   0   'False
+   End
+   Begin VBCE.Label lblWindowMessages 
+      Height          =   195
+      Left            =   120
+      TabIndex        =   0
+      Top             =   120
+      Width           =   1350
+      _cx             =   2381
+      _cy             =   344
+      Appearance      =   1
+      AutoSize        =   -1  'True
+      BackColor       =   -2147483633
+      BackStyle       =   1
+      BorderStyle     =   0
+      Caption         =   "Window Messages"
+      Enabled         =   -1  'True
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   -2147483640
+      Alignment       =   0
+      UseMnemonic     =   -1  'True
+      WordWrap        =   0   'False
+   End
+End
+Attribute VB_Name = "frmMain"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+Private WaitStep As Long
+
+Private Sub cmdQuit_Click()
+    NotifyIcon_Remove
+    App.End
+End Sub
+
+Private Sub cmdWait_Click()
+    Hide
+    WaitStep = 1
+    NotifyIcon_Add hWnd, ImageList.hImageList, WaitStep
+    tmrWait.Enabled = True
+End Sub
+
+Private Sub Form_Load()
+
+    MsgBox "Close the window to minimize it to the tray, tap or double-tap the icon to show the window again. Click Wait to demonstrate modifying the tray icon without removing it." & vbNewLine & vbNewLine & "To end the application, press the Quit button.", vbInformation, App.Title
+
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_small.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_1.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_2.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_3.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_4.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_5.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_6.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_7.bmp"
+    ImageList.Add PathHelpers_AddPathSeparator(App.Path) & "icon_clock_8.bmp"
+
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
+
+    'This procedure receives the callbacks from the System Tray icon.
+    Dim lngResult  As Long
+
+    Dim lngMessage As Long
+
+    'The value of X will vary depending upon the scalemode setting.
+    If ScaleMode = vbPixels Then
+        lngMessage = X
+    Else
+        lngMessage = X / Screen.TwipsPerPixelX
+    End If
+
+    Select Case lngMessage
+
+        Case WM_LBUTTONUP 'The user has tapped on the icon once.
+            Show
+            NotifyIcon_Remove
+            lstMessages.AddItem "WM_LBUTTONUP"
+
+        Case WM_LBUTTONDBLCLK 'The user has double-tapped on the icon.
+            Show
+            NotifyIcon_Remove
+            lstMessages.AddItem "WM_LBUTTONDBLCLK"
+
+        Case WM_RBUTTONUP 'The user has tapped on the icon while holding Ctrl, does not seem to work for now.
+            lstMessages.AddItem "WM_RBUTTONUP"
+    End Select
+
+    lstMessages.ListIndex = lstMessages.ListCount - 1
+
+    If WaitStep <> 0 Then
+        NotifyIcon_Modify 0
+        tmrWait.Enabled = False
+        WaitStep = 0
+    End If
+
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    Hide
+    NotifyIcon_Add hWnd, ImageList.hImageList, 0
+    Cancel = 1
+End Sub
+
+Private Sub tmrWait_Timer()
+
+    If WaitStep <> 8 Then
+        WaitStep = WaitStep + 1
+        NotifyIcon_Modify WaitStep
+    Else
+        tmrWait.Enabled = False
+        NotifyIcon_Remove
+        Show
+    End If
+
+End Sub
+
+
